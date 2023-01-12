@@ -1,33 +1,44 @@
-from tkinter import *
+import tkinter
+import customtkinter
 
 from nlp_mini_project import ProfHinglishFilter
 
+customtkinter.set_appearance_mode("System")  
+customtkinter.set_default_color_theme("blue")  
 
 def show_entry_fields():
   p1= e1.get()
+  customtkinter.CTkLabel(app,text="No profanities detected!",font=("Helvetica", 20)).place(x=100,y=240)
 
   model=ProfHinglishFilter(p1)
   result=model.filter_gaali()
   print("Expletives detected and filtered! Please avoid using swear words.\n",result)
-  Label(master,text="Input:" + e1.get(),font=("Arial", 16)).place(x=120,y=270)
+  customtkinter.CTkLabel(app,text="Input:" + e1.get(),font=("Helvetica", 20)).place(x=100,y=240)
   if result[1]==result[0]:
-    Label(master,text="No profanities detected!",font=("Arial", 16)).place(x=140,y=370)
+    customtkinter.CTkLabel(app,text="No profanities detected!",font=("Helvetica", 20)).place(x=100,y=240)
   else:
-    Label(master,font=("Arial", 16),text="The filtered text is as follows:\n"+result[0]).place(x=120,y=370)
+    customtkinter.CTkLabel(app,font=("Helvetica", 20),text="The filtered text is as follows:\n"+result[0]).place(x=100,y=240)
 
 
+app = customtkinter.CTk() 
+app.geometry("600x500")
+app.title("Hinglish Profanity filter")
 
-master=Tk()
-master.title("Hinglish Profanity Filter")
-master.geometry("600x600")
 
-label=Label(master,text="Hinglish Profanity filter"
-            ,bg="black",fg="white", font=("Arial", 24)).place(x=150,y=30)
+label = customtkinter.CTkLabel(master=app, text="Hinglish Profanity filter", font=("Helvetica", 24, "bold"))
+label.place(x=300, y=40, anchor=tkinter.CENTER)
 
-e1=Entry(master,font=("Arial", 24))
+e1 = customtkinter.CTkEntry(master=app, 
+        placeholder_text="Enter your message", 
+        corner_radius=10,
+        width=400,
+        font=("Helvetica", 20)
+        )
+e1.pack(fill="x", pady=(80, 0), ipady=20, padx=10)
 
-e1.place(x=135,y=100)
 
-Button(master,text='Filter',font=("Arial", 24),command=show_entry_fields).place(x=270,y=150)
+# Use CTkButton instead of tkinter Button
+button = customtkinter.CTkButton(master=app, text="CTkButton", font=("Helvetica", 24, "bold"), command=show_entry_fields)
+button.pack(ipadx=10, ipady=10, pady=(20, 0))
 
-mainloop()
+app.mainloop()
