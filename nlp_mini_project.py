@@ -1,7 +1,4 @@
-import nltk
-
 from nltk.tokenize import RegexpTokenizer
-import re
 import pandas as pd
 import numpy as np
 
@@ -15,37 +12,49 @@ class ProfHinglishFilter:
         self.gaaliSent = self.gaaliSent.lower()
         print(self.gaaliSent)
 
+    def extra_letters(self, s):
+        original = s[0]
+        edited = s[0]
+        for i in s[1:]:
+            if i != original:
+                edited += i
+                original = i
+        return edited
+
     def filter_gaali(self):
         # tokenizer = RegexpTokenizer(r'\w+')
 
         # word_tokinize = tokenizer.tokenize(self.gaaliSent)
         word_tokinize = self.gaaliSent.split()
-        print(word_tokinize)
+        edits = []
+        for i in word_tokinize:
+            edits.append(self.extra_letters(i))
 
-        data_set = pd.read_csv('profanity_filter.csv')
-
-        data_set.head()
-
+        data_set = pd.read_csv('profanity_final.csv')
         new = data_set.to_numpy()
         new = new.flatten()
-        new
+        data_set1 = []
+        for i in new:
+            data_set1.append(self.extra_letters(i))
 
+        new = data_set1
+        print(new, "data")
         output = []
 
-        for i in range(0, len(word_tokinize)):
+        for i in range(0, len(edits)):
             found = True
             for j in range(0, len(new)):
-                if word_tokinize[i] == new[j]:
+                if edits[i] == new[j]:
                     found = False
-                    temp = word_tokinize[i].replace(word_tokinize[i], "***")
+                    temp = edits[i].replace(edits[i], "***")
                     output.append(temp)
                     break
             if (found):
-                output.append(word_tokinize[i])
+                output.append(edits[i])
 
         print(output)
 
         final_text = " ".join(output)
 
-        print(final_text.title())
-        return [str(final_text.title()), str(self.gaaliSent)]
+        print(final_text)
+        return [str(final_text), str(self.gaaliSent)]
