@@ -47,10 +47,12 @@ class ProfHinglishFilter:
                 if edits[i] == new[j]:
                     found = False
                     temp = edits[i].replace(edits[i], "***")
+                    if temp=='***':
+                        pass
                     output.append(temp)
                     break
             if (found):
-                output.append(edits[i])
+                output.append(word_tokinize[i])
 
         print(output)
 
